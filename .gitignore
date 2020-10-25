@@ -1,5 +1,8 @@
 # Build output
 /target
 
+# Large files
+tests/999-all.srt
+
 # Editor/DE files
 .vscode

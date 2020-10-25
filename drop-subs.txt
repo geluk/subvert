@@ -1,0 +1,27 @@
+# OpenSubtitles
+(www\.)?[oO]pen[sS]ubtitles\.org
+[oO]pen ?[sS]ubtitles [mM][kK][vV] [pP]layer
+[oO]pen ?[sS]ubtitles recommends using
+
+# Other
+([wW]{3}\.)?[A-z0-9]*(subtitle|SUBTITLE)[A-z0-9]\.(org|com|net)
+
+# Various
+^Resync by .+
+^Encoded by .+
+^[Ss]ubtitles downloaded from
+
+# Specific matches
+vajee555@gmail.com
+TCS Subtitling
+official itunes subtitles
+
+# Generic ads
+http://[A-z0-9]+\.([A-z]*)
+
+# Ads
+YIFY.TORRENTS
+www\.FlixTor\.to
+GRATISSTREAMEN\.NL
+AMERICASCARDROOM\.COM
+www\.i[dD]ownload\.club
