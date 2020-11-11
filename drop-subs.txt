@@ -7,9 +7,10 @@
 ([wW]{3}\.)?[A-z0-9]*(subtitle|SUBTITLE)[A-z0-9]\.(org|com|net)
 
 # Various
-^Resync by .+
+^Resync(.*) by .+
 ^Encoded by .+
 ^[Ss]ubtitles downloaded from
+^Sub Rip: 
 
 # Specific matches
 vajee555@gmail.com
