@@ -1,16 +1,14 @@
 use crate::srt::Subtitle;
 
 use std::io::{BufWriter, Write};
-use std::path::Path;
 use std::time::Duration;
 
 use anyhow::{Context, Result};
 
-pub fn serialise<P: AsRef<Path>>(subs: Vec<Subtitle>, output: P) -> Result<()> {
-    let file = std::fs::File::create(output).context("Failed to create file!")?;
-    let mut writer = BufWriter::new(file);
-    write_subs(&mut writer, subs).context("Failed to write to output file.")?;
-    writer.flush().context("Failed to write to output file.")?;
+pub fn serialise<W: Write>(subs: Vec<Subtitle>, output: W) -> Result<()> {
+    let mut writer = BufWriter::new(output);
+    write_subs(&mut writer, subs).context("Failed to write subtitles.")?;
+    writer.flush().context("Failed to write subtitles.")?;
     Ok(())
 }
 
