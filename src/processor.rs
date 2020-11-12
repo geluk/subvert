@@ -36,13 +36,17 @@ impl Processor {
                 hide_at = Duration::from_secs(5);
             }
             if hide_at.as_secs() > 0 {
+                let text = self.opts.leader_sub
+                    .clone()
+                    .unwrap_or("Subtitles loaded.".to_string());
+
                 self.subs.insert(
                     0,
                     Subtitle {
                         sequence_number: None,
                         show_at: Duration::from_secs(0),
                         hide_at,
-                        text: vec!["Subtitles loaded.".to_string()],
+                        text: vec![text],
                     },
                 )
             }
@@ -99,6 +103,7 @@ impl Processor {
             .iter()
             .filter(|m| m.is_ad)
             .map(|m| m.index)
+            .rev()
             .collect();
 
         for i in drop_indices {

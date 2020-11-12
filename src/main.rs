@@ -48,6 +48,12 @@ fn run() -> Result<()> {
             .value_name("FILE")
             .help("Write a backup of the original input to the specified file.")
             .takes_value(true))
+        .arg(Arg::with_name("leader-text")
+            .short("l")
+            .long("leader-text")
+            .value_name("TEXT")
+            .help("Insert the given text into the leader subtitle.")
+            .takes_value(true))
         .get_matches();
 
     let input = matches.value_of("input").unwrap();
@@ -60,7 +66,7 @@ fn run() -> Result<()> {
             .context("Failed to read from stdin")?;
         buffer
     } else {
-        std::fs::read_to_string(input).context("Failed to open input file.")?
+        std::fs::read_to_string(input).context(format!("Failed to open input file: '{}'", input))?
     };
 
     if let Some(backup_path) = matches.value_of("backup") {
@@ -69,13 +75,13 @@ fn run() -> Result<()> {
 
     let mut parser = Parser::new();
 
-    let subs = parser.parse(&data).context(format!("Failed to parse SRT file: {}", input))?;
+    let subs = parser.parse(&data).context(format!("Failed to parse SRT file: '{}'", input))?;
     if subs.is_empty() {
         return Err(anyhow!("You appear to have supplied an empty file."));
     }
 
     let opts = processor::ProcessOpts {
-        leader_sub: None,
+        leader_sub: matches.value_of("leader-text").map(|s| s.to_string()),
     };
     let subs = processor::process(subs, opts)?;
     eprintln!("Finished parsing {}", input);
