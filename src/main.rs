@@ -14,13 +14,18 @@ use clap::{Arg, App};
 fn main() {
     match run() {
         Ok(()) => (),
-        Err(err) => eprintln!("An error occurred:\n{}", err),
+        Err(err) => {
+            eprintln!("An error occurred: {}", err);
+            for cause in err.chain().skip(1) {
+                eprintln!("    {}", cause);
+            }
+        },
     }
 }
 
 fn run() -> Result<()> {
     let matches = App::new("Subvert")
-        .version("0.1")
+        .version("0.4")
         .author("Johan Geluk <johan@geluk.io>")
         .about("Transform and clean SRT subtitles")
         .arg(Arg::with_name("input")
@@ -64,13 +69,13 @@ fn run() -> Result<()> {
 
     let mut parser = Parser::new();
 
-    let subs = parser.parse(&data)?;
+    let subs = parser.parse(&data).context(format!("Failed to parse SRT file: {}", input))?;
     if subs.is_empty() {
         return Err(anyhow!("You appear to have supplied an empty file."));
     }
 
     let subs = processor::process(subs)?;
-    eprintln!("Finished");
+    eprintln!("Finished parsing {}", input);
     
     if output == "-" {
         let dst = io::stdout();
