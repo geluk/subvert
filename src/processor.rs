@@ -89,12 +89,11 @@ fn is_match(regex: &Regex, subtitle: &Subtitle) -> bool {
 
 fn load_regex() -> Result<Vec<Regex>> {
     let patterns =
-        std::fs::read_to_string("drop-subs.txt").context("Failed to read regex file.")?;
+        include_str!("../embed/drop-subs.txt");
     let patterns = patterns
         .split('\n')
         .map(|p| p.trim_start())
         .filter(|p| !p.is_empty() && !p.starts_with('#'));
-    eprintln!("{:#?}", patterns.clone().collect::<Vec<&str>>());
     patterns
         .map(|p| Regex::new(p).context("Invalid regex."))
         .collect()

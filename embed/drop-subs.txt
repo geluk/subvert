@@ -8,6 +8,7 @@
 
 # Various
 ^Resync(.*) by .+
+^Sync & corrections by .+
 ^Encoded by .+
 ^[Ss]ubtitles downloaded from
 ^Sub Rip: 
@@ -26,3 +27,4 @@ www\.FlixTor\.to
 GRATISSTREAMEN\.NL
 AMERICASCARDROOM\.COM
 www\.i[dD]ownload\.club
+addic7ed\.com
