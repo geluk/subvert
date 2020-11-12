@@ -74,7 +74,10 @@ fn run() -> Result<()> {
         return Err(anyhow!("You appear to have supplied an empty file."));
     }
 
-    let subs = processor::process(subs)?;
+    let opts = processor::ProcessOpts {
+        leader_sub: None,
+    };
+    let subs = processor::process(subs, opts)?;
     eprintln!("Finished parsing {}", input);
     
     if output == "-" {
