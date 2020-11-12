@@ -25,7 +25,7 @@ fn main() {
 
 fn run() -> Result<()> {
     let matches = App::new("Subvert")
-        .version("0.4")
+        .version("0.6")
         .author("Johan Geluk <johan@geluk.io>")
         .about("Transform and clean SRT subtitles")
         .arg(Arg::with_name("input")
@@ -84,7 +84,6 @@ fn run() -> Result<()> {
         leader_sub: matches.value_of("leader-text").map(|s| s.to_string()),
     };
     let subs = processor::process(subs, opts)?;
-    eprintln!("Finished parsing {}", input);
     
     if output == "-" {
         let dst = io::stdout();
