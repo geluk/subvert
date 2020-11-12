@@ -23,7 +23,7 @@ impl Parser {
             Ok((_, subs)) => Ok(subs),
             Err(Err::Error(err)) | Err(Err::Failure(err)) => {
                 let conv = convert_error(input, err);
-                Err(SubvertError::ParseError(conv)).context("Failed to parse SRT file")
+                Err(SubvertError::ParseError(conv)).context("Invalid SRT file")
             }
             Err(Err::Incomplete(_)) => {
                 unreachable!("Incomplete data received by non-streaming parser.")
@@ -69,7 +69,7 @@ fn all_subtitles(input: &str) -> IResult<&str, Vec<Subtitle>, VerboseError<&str>
 fn subtitle(input: &str) -> IResult<&str, Subtitle, VerboseError<&str>> {
     let (input, _) = multispace0(input)?;
     let (input, _) = terminated(seq_num, multispace1)(input)?;
-    let (input, (show_at, hide_at)) = terminated(show_hide, line_ending)(input)?;
+    let (input, (show_at, hide_at)) = terminated(show_hide, line_ending_or_eof)(input)?;
     let (input, text) = sub_text(input)?;
 
     Ok((
@@ -83,6 +83,10 @@ fn subtitle(input: &str) -> IResult<&str, Subtitle, VerboseError<&str>> {
     ))
 }
 
+fn line_ending_or_eof(input: &str) -> IResult<&str, &str, VerboseError<&str>> {
+    alt((line_ending, end_of_file))(input)
+}
+
 fn end_of_file(input: &str) -> IResult<&str, &str, VerboseError<&str>> {
     if input.is_empty() {
         Ok((input, input))
@@ -94,10 +98,10 @@ fn end_of_file(input: &str) -> IResult<&str, &str, VerboseError<&str>> {
 fn sub_text(input: &str) -> IResult<&str, Vec<String>, VerboseError<&str>> {
     let line = terminated(
         take_while1(|c: char| c != '\n' && c != '\r'),
-        alt((line_ending, end_of_file)),
+        line_ending_or_eof,
     );
 
-    let (input, (vec, _)) = many_till(line, alt((line_ending, end_of_file)))(input)?;
+    let (input, (vec, _)) = many_till(line, line_ending_or_eof)(input)?;
 
     Ok((input, vec.into_iter().map(String::from).collect()))
 }
