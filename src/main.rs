@@ -25,7 +25,7 @@ fn main() {
 
 fn run() -> Result<()> {
     let matches = App::new("Subvert")
-        .version("0.6")
+        .version("0.7")
         .author("Johan Geluk <johan@geluk.io>")
         .about("Transform and clean SRT subtitles")
         .arg(Arg::with_name("input")

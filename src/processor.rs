@@ -23,8 +23,8 @@ impl Processor {
     }
 
     fn process(mut self) -> Result<Vec<Subtitle>> {
-        self.insert_leader();
         self.strip_ads()?;
+        self.insert_leader();
         self.generate_seqnum();
         Ok(self.subs)
     }
