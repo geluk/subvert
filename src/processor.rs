@@ -60,6 +60,9 @@ impl Processor {
             is_ad: bool,
         }
         fn is_subset(prev: &Marker, cur: &Marker) -> bool {
+            if prev.sub.text.is_empty() || cur.sub.text.is_empty() {
+                return false;
+            }
             let prev = &prev.sub.text[0];
             let cur = &cur.sub.text[0];
     
