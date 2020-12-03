@@ -5,13 +5,15 @@
 
 # Other
 ([wW]{3}\.)?[A-z0-9]*(subtitle|SUBTITLE)[A-z0-9]\.(org|com|net)
+www\.osdb\.link
 
 # Various
 ^Resync(.*) by .+
 ^Sync & corrections by .+
 ^Encoded by .+
 ^[Ss]ubtitles downloaded from
-^Sub Rip: 
+Sub Rip: 
+rate this subtitle
 
 # Specific matches
 vajee555@gmail.com
@@ -28,3 +30,4 @@ GRATISSTREAMEN\.NL
 AMERICASCARDROOM\.COM
 www\.i[dD]ownload\.club
 addic7ed\.com
+LookLive
