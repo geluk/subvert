@@ -9,7 +9,7 @@ use crate::parser::Parser;
 use std::io::{self, Read};
 
 use anyhow::{anyhow, Context, Result};
-use clap::{Arg, App};
+use clap::Parser as ClapParser;
 
 fn main() {
     match run() {
@@ -19,77 +19,82 @@ fn main() {
             for cause in err.chain().skip(1) {
                 eprintln!("    {}", cause);
             }
-        },
+        }
     }
 }
 
+#[derive(ClapParser)]
+#[command(about = "Transform and clean SRT subtitles")]
+struct Cli {
+    #[arg(
+        short,
+        long,
+        value_name = "FILE",
+        help = "The file to read from. If not supplied, the subtitles will be read from standard input.",
+        default_value = "-"
+    )]
+    input: String,
+    #[arg(
+        short,
+        long,
+        value_name = "FILE",
+        help = "The file to write to. If not supplied, the subtitles will be written to standard input.",
+        default_value = "-"
+    )]
+    output: String,
+    #[arg(
+        short,
+        long,
+        value_name = "FILE",
+        help = "Write a backup of the original input to the specified file."
+    )]
+    backup: Option<String>,
+    #[arg(
+        short,
+        long,
+        value_name = "FILE",
+        help = "Insert the given text into the leader subtitle."
+    )]
+    leader_text: Option<String>,
+}
+
 fn run() -> Result<()> {
-    let matches = App::new("Subvert")
-        .version("0.7")
-        .author("Johan Geluk <johan@geluk.io>")
-        .about("Transform and clean SRT subtitles")
-        .arg(Arg::with_name("input")
-            .short("i")
-            .long("input")
-            .value_name("FILE")
-            .help("The file to read from. If not supplied, the subtitles will be read from standard input.")
-            .takes_value(true)
-            .default_value("-"))
-        .arg(Arg::with_name("output")
-            .short("o")
-            .long("output")
-            .value_name("FILE")
-            .help("The file to write to. If not supplied, the subtitles will be written to standard output.")
-            .takes_value(true)
-            .default_value("-"))
-        .arg(Arg::with_name("backup")
-            .short("b")
-            .long("backup")
-            .value_name("FILE")
-            .help("Write a backup of the original input to the specified file.")
-            .takes_value(true))
-        .arg(Arg::with_name("leader-text")
-            .short("l")
-            .long("leader-text")
-            .value_name("TEXT")
-            .help("Insert the given text into the leader subtitle.")
-            .takes_value(true))
-        .get_matches();
+    let cli = Cli::parse();
 
-    let input = matches.value_of("input").unwrap();
-    let output = matches.value_of("output").unwrap();
-
-    let data = if input == "-" {
+    let data = if cli.input == "-" {
         let mut buffer = String::new();
         io::stdin()
             .read_to_string(&mut buffer)
             .context("Failed to read from stdin")?;
         buffer
     } else {
-        std::fs::read_to_string(input).context(format!("Failed to open input file: '{}'", input))?
+        std::fs::read_to_string(&cli.input)
+            .context(format!("Failed to open input file: '{}'", cli.input))?
     };
 
-    if let Some(backup_path) = matches.value_of("backup") {
+    if let Some(backup_path) = cli.backup {
         std::fs::write(backup_path, &data)?;
     }
 
     let mut parser = Parser::new();
 
-    let subs = parser.parse(&data).context(format!("Failed to parse SRT file: '{}'", input))?;
+    let subs = parser
+        .parse(&data)
+        .context(format!("Failed to parse SRT file: '{}'", cli.input))?;
     if subs.is_empty() {
         return Err(anyhow!("You appear to have supplied an empty file."));
     }
 
     let opts = processor::ProcessOpts {
-        leader_sub: matches.value_of("leader-text").map(|s| s.to_string()),
+        leader_sub: cli.leader_text,
     };
     let subs = processor::process(subs, opts)?;
-    
-    if output == "-" {
+
+    if cli.output == "-" {
         let dst = io::stdout();
         serialiser::serialise(subs, dst)?;
     } else {
-        let dst = std::fs::File::create(output)?;
+        let dst = std::fs::File::create(cli.output)?;
         serialiser::serialise(subs, dst)?;
     };
 
