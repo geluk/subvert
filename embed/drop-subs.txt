@@ -6,6 +6,7 @@
 # Other
 ([wW]{3}\.)?[A-z0-9]*(subtitle|SUBTITLE)[A-z0-9]\.(org|com|net)
 www\.osdb\.link
+osdb\.link/[A-z0-9]
 
 # Various
 ^Resync(.*) by .+
@@ -31,3 +32,4 @@ AMERICASCARDROOM\.COM
 www\.i[dD]ownload\.club
 addic7ed\.com
 LookLive
+[sS]treaming[sS]ites\.com
