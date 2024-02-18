@@ -1,12 +1,20 @@
 # OpenSubtitles
-(www\.)?[oO]pen[sS]ubtitles\.org
+(www\.)?[oO]pen[sS]ubtitles\.(org|com)
 [oO]pen ?[sS]ubtitles [mM][kK][vV] [pP]layer
 [oO]pen ?[sS]ubtitles recommends using
 
 # Other
-([wW]{3}\.)?[A-z0-9]*(subtitle|SUBTITLE)[A-z0-9]\.(org|com|net)
+([wW]{3}\.)?[A-z0-9]*([sS][uU][bB][tT][iI][tT][lL][eE])[A-z0-9]\.(org|com|net)
 www\.osdb\.link
 osdb\.link/[A-z0-9]
+[iI][sS][uU][bB][dD][bB]\.com
+ondertitel\.com
+[sS]ubscene\.com
+podnapisi\.net
+[uU]-[sS][uU][bB]\.net
+[aA]ll[sS]ubs.org
+access\.wgbh\.org
+sous-titre\.eu
 
 # Various
 ^Resync(.*) by .+
@@ -15,14 +23,18 @@ osdb\.link/[A-z0-9]
 ^[Ss]ubtitles downloaded from
 Sub Rip: 
 rate this subtitle
+[Ss]ubtitles?.*\.com
+[Ss]ub.*@(gmail|hotmail).com
 
 # Specific matches
 vajee555@gmail.com
+parminder222536@hotmail.com
+facebook\.com/MD4Allz
 TCS Subtitling
 official itunes subtitles
 
 # Generic ads
-http://[A-z0-9]+\.([A-z]*)
+https?://[A-z0-9]+\.([A-z]*)
 
 # Ads
 YIFY.TORRENTS
@@ -30,6 +42,8 @@ www\.FlixTor\.to
 GRATISSTREAMEN\.NL
 AMERICASCARDROOM\.COM
 www\.i[dD]ownload\.club
-addic7ed\.com
+[aA]ddic7ed\.com
 LookLive
 [sS]treaming[sS]ites\.com
+saveanilluminati\.com
+forom\.com
